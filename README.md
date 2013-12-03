@@ -34,15 +34,15 @@ What specific information does SQueaL provide?
 
 ### Tables
 
-Table names
-Number of records
-Frequency of inserts, updates, and deletes
-Sort on metrics
+* Table names
+* Number of records
+* Frequency of inserts, updates, and deletes
+* Sort on metrics
 
 ### Records
 
-Column names and types
-Average, maximum, and minimum size of column values, and standard deviation
-Typical or representative values for each column
-Sort on metrics
+* Column names and types
+* Average, maximum, and minimum size of column values, and standard deviation
+* Typical or representative values for each column
+* Sort on metrics
 
