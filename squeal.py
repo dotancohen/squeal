@@ -1,11 +1,17 @@
 #!/usr/bin/python2
 
 import MySQLdb
+import time
 
 host = 'localhost'
 username = 'root'
 password = 'brunoMysql42' # I don't mind this password showing up in Github!
 database = 'phpfox'
+
+
+
+squeal_version = '0.1'
+prompt = '>>'
 
 
 
@@ -28,33 +34,19 @@ class Table(object):
 
 
 def main():
-	global host, username, password, database
+
+	global prompt, squeal_version, host, username, password, database
+
+	print("\nWelcome to Squeal version %s!" % (squeal_version, ))
 
 	conn = MySQLdb.connect(host=host, user=username, passwd=password, db=database)
 	cursor = conn.cursor()
-
 	tables = populate_tables(conn, cursor)
 
-	"""
-	print(len(tables))
-
-	for i in range(10):
-		print("%s: %s" % (tables[i].name, tables[i].records ))
-	# numrows = int(cursor.rowcount)
-	"""
-
-
-	tables_sorted_size = sorted(tables, key=lambda k: k.records)
-
-	print("\nShow 3 largest tables")
-	for i in range(3):
-		print("%s: %s" % (tables_sorted_size[-1-i].name, tables_sorted_size[-1-i].records,))
-
-	print("\nShow 3 smallest tables")
-	for i in range(3):
-		print("%s: %s" % (tables_sorted_size[i].name, tables_sorted_size[i].records,))
-
-
+	print("\n20 largest tables")
+	largest = show_tables(tables, 'desc', 20)
+	for t in largest:
+		print("%s: %s" % (t.name, t.records,))
 
 	return True
 
@@ -96,7 +88,7 @@ def populate_tables(conn, cursor):
 
 
 
-def show_tables(envm, tables, order='alph', limit=None):
+def show_tables(tables, order='alph', limit=None):
 
 	legal_orders = ['alph', 'asc', 'desc']
 
