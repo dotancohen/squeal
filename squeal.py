@@ -188,7 +188,15 @@ def show_table_details(conn, cursor, prompt, table):
 	output_title("Showing table %s" % (table.name,))
 
 	sql = "DESCRIBE %s" % (table.name,)
-	cursor.execute(sql)
+	output_table_from_sql(conn, cursor, sql)
+
+	return True
+
+
+
+def output_table_from_sql(conn, cursor, sql, data=None):
+
+	cursor.execute(sql, data)
 	conn.commit()
 	results = cursor.fetchall()
 
@@ -215,6 +223,7 @@ def show_table_details(conn, cursor, prompt, table):
 		print(tavnit % row)
 
 	print(separator)
+
 
 	return True
 
