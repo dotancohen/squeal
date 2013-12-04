@@ -96,5 +96,40 @@ def populate_tables(conn, cursor):
 
 
 
+def show_tables(envm, tables, order='alph', limit=None):
+
+	legal_orders = ['alph', 'asc', 'desc']
+
+	if limit == None:
+		limit = len(tables)
+
+	if not order in legal_orders:
+		return False
+
+	if order=='alph':
+		return sorted(tables, key=lambda k: k.name)
+
+	sorted_size = sorted(tables, key=lambda k: k.records)
+
+	if order=='asc':
+		return sorted_size[:limit]
+
+	if order=='desc':
+		return sorted_size[::-1][:limit]
+
+	"""
+	print("\nShow 3 largest tables")
+	for i in range(20):
+		print("%s: %s" % (tables_sorted_size[-1-i].name, tables_sorted_size[-1-i].records,))
+
+	print("\nShow 3 smallest tables")
+	for i in range(3):
+		print("%s: %s" % (tables_sorted_size[i].name, tables_sorted_size[i].records,))
+	"""
+
+	return True
+
+
+
 if __name__ == '__main__':
 	main()
