@@ -63,8 +63,9 @@ def main():
 		operation = raw_input(prompt)
 
 		if operation.isdigit():
-			# TODO: check that the input is in bounds!
-			show_table(conn, cursor, prompt, largest[int(operation)-1])
+			operation = int(operation)
+			if 0<operation and operation<=len(largest):
+				show_table(conn, cursor, prompt, largest[operation-1])
 
 		else:
 			operation = operation.lower().strip()
