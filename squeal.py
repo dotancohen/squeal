@@ -4,7 +4,7 @@ import MySQLdb
 
 host = 'localhost'
 username = 'root'
-password = 'brunoMysql42'
+password = 'brunoMysql42' # I don't mind this password showing up in Github!
 database = 'phpfox'
 
 
