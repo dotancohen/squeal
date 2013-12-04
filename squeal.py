@@ -42,30 +42,42 @@ def main():
 
 	conn = MySQLdb.connect(host=host, user=username, passwd=password, db=database)
 	cursor = conn.cursor()
-	tables = populate_tables(conn, cursor)
+	all_tables = populate_tables(conn, cursor)
 
-	print("\n20 largest tables")
-	largest = show_tables(tables, 'desc', 20)
-	i = 1
-	for t in largest:
-		print("%s: %s (%s)" % (i, t.name, t.records,))
-		i +=1
+	menu_title = "20 largest tables"
+	menu_tables = sort_tables(all_tables, 'desc', 20)
+	show_menu = True
 
 	while True:
 
-		print("\nPlease select an operation:")
-		print(" #. Enter a table number to see details.")
-		print(" A. Show all tables sorted by size decending")
-		print(" B. Show all tables sorted by size ascending")
-		print(" C. Show all tables sorted alphabetically")
-		print(" -. Exit")
+		if show_menu:
+			print("\n   %s" % (menu_title,))
+			print('   ' + '-'*len(menu_title))
+			i = 1
+			for t in menu_tables:
+				print("%s: %s (%s)" % (i, t.name, t.records,))
+				i +=1
+
+			print("\nPlease select an operation:")
+			print("--------------------------")
+			print(" #. Enter a table number to see details.")
+			print(" A. Show all tables sorted by size decending")
+			print(" B. Show all tables sorted by size ascending")
+			print(" C. Show all tables sorted alphabetically")
+			print(" -. Exit")
+
+		else:
+			show_menu = True
 
 		operation = raw_input(prompt)
 
 		if operation.isdigit():
 			operation = int(operation)
-			if 0<operation and operation<=len(largest):
-				show_table(conn, cursor, prompt, largest[operation-1])
+			if 0<operation and operation<=len(menu_tables):
+				show_table(conn, cursor, prompt, menu_tables[operation-1])
+			else:
+				print("\nInvalid input!")
+				show_menu = False
 
 		else:
 			operation = operation.lower().strip()
@@ -73,13 +85,17 @@ def main():
 			if operation == '-':
 				sys.exit()
 			elif operation == 'a':
-				show_tables(tables, 'asc')
+				menu_title = "All tables sorted by size decending"
+				menu_tables = sort_tables(all_tables, 'desc')
 			elif operation == 'b':
-				show_tables(tables, 'desc')
+				menu_title = "All tables sorted by size ascending"
+				menu_tables = sort_tables(all_tables, 'asc')
 			elif operation == 'c':
-				show_tables(tables, 'alph')
+				menu_title = "All tables sorted alphabetically"
+				menu_tables = sort_tables(all_tables, 'alph')
 			else:
-				print("Invalid input!")
+				print("\nInvalid input!")
+				show_menu = False
 
 	return True
 
@@ -121,7 +137,7 @@ def populate_tables(conn, cursor):
 
 
 
-def show_tables(tables, order='alph', limit=None):
+def sort_tables(tables, order='alph', limit=None):
 
 	legal_orders = ['alph', 'asc', 'desc']
 
