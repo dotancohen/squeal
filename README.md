@@ -36,7 +36,8 @@ What specific information does SQueaL provide?
 
 * Table names
 * Number of records
-* Frequency of inserts, updates, and deletes
+* Creation time, size on disk
+* Estimate: Frequency of inserts, updates, and deletes
 * Sort on metrics
 
 ### Records
