@@ -4,6 +4,8 @@ import MySQLdb
 import sys
 import time
 
+from pprint import pprint
+
 host = 'localhost'
 username = 'root'
 password = 'brunoMysql42' # I don't mind this password showing up in Github!
@@ -51,8 +53,7 @@ def main():
 	while True:
 
 		if show_menu:
-			print("\n   %s" % (menu_title,))
-			print('   ' + '-'*len(menu_title))
+			output_title(menu_title)
 			i = 1
 			for t in menu_tables:
 				print("%s: %s (%s)" % (i, t.name, t.records,))
@@ -74,7 +75,7 @@ def main():
 		if operation.isdigit():
 			operation = int(operation)
 			if 0<operation and operation<=len(menu_tables):
-				show_table(conn, cursor, prompt, menu_tables[operation-1])
+				show_table_details(conn, cursor, prompt, menu_tables[operation-1])
 			else:
 				print("\nInvalid input!")
 				show_menu = False
@@ -96,6 +97,16 @@ def main():
 			else:
 				print("\nInvalid input!")
 				show_menu = False
+
+	return True
+
+
+
+def output_title(text):
+
+	print('')
+	print('   %s' % (text,))
+	print('   ' + '-'*len(text))
 
 	return True
 
@@ -172,9 +183,38 @@ def sort_tables(tables, order='alph', limit=None):
 
 
 
-def show_table(conn, cursor, prompt, table):
+def show_table_details(conn, cursor, prompt, table):
 
-	print(table.name)
+	output_title("Showing table %s" % (table.name,))
+
+	sql = "DESCRIBE %s" % (table.name,)
+	cursor.execute(sql)
+	conn.commit()
+	results = cursor.fetchall()
+
+	widths = []
+	columns = []
+	tavnit = '|'
+	separator = '+'
+
+	for cd in cursor.description:
+		widths.append(max(cd[2], len(cd[0])))
+		columns.append(cd[0])
+
+	for w in widths:
+		tavnit += " %-"+"%ss |" % (w,)
+		separator += '-'*w + '--+'
+
+	# Now print!
+
+	print(separator)
+	print(tavnit % tuple(columns))
+
+	print(separator)
+	for row in results:
+		print(tavnit % row)
+
+	print(separator)
 
 	return True
 
@@ -182,3 +222,18 @@ def show_table(conn, cursor, prompt, table):
 
 if __name__ == '__main__':
 	main()
+
+
+
+"""
+	for row in results:
+		print(row[0])
+
+
+	for t in table_names:
+		sql = "SELECT count(*) FROM %s" % (t, )
+		cursor.execute(sql)
+		conn.commit()
+		records = cursor.fetchone()[0] # Fetch first column of first row
+		tables.append(Table(t, records))
+"""
