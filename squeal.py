@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 
 import MySQLdb
+import sys
 import time
 
 host = 'localhost'
@@ -11,7 +12,7 @@ database = 'phpfox'
 
 
 squeal_version = '0.1'
-prompt = '>>'
+prompt = '>> '
 
 
 
@@ -45,8 +46,39 @@ def main():
 
 	print("\n20 largest tables")
 	largest = show_tables(tables, 'desc', 20)
+	i = 1
 	for t in largest:
-		print("%s: %s" % (t.name, t.records,))
+		print("%s: %s (%s)" % (i, t.name, t.records,))
+		i +=1
+
+	while True:
+
+		print("\nPlease select an operation:")
+		print(" #. Enter a table number to see details.")
+		print(" A. Show all tables sorted by size decending")
+		print(" B. Show all tables sorted by size ascending")
+		print(" C. Show all tables sorted alphabetically")
+		print(" -. Exit")
+
+		operation = raw_input(prompt)
+
+		if operation.isdigit():
+			# TODO: check that the input is in bounds!
+			show_table(conn, cursor, prompt, largest[int(operation)-1])
+
+		else:
+			operation = operation.lower().strip()
+
+			if operation == '-':
+				sys.exit()
+			elif operation == 'a':
+				show_tables(tables, 'asc')
+			elif operation == 'b':
+				show_tables(tables, 'desc')
+			elif operation == 'c':
+				show_tables(tables, 'alph')
+			else:
+				print("Invalid input!")
 
 	return True
 
@@ -118,6 +150,14 @@ def show_tables(tables, order='alph', limit=None):
 	for i in range(3):
 		print("%s: %s" % (tables_sorted_size[i].name, tables_sorted_size[i].records,))
 	"""
+
+	return True
+
+
+
+def show_table(conn, cursor, prompt, table):
+
+	print(table.name)
 
 	return True
 
