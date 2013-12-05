@@ -239,9 +239,10 @@ def show_table_details(conn, cursor, prompt, table):
 
 	output_title("Showing table %s" % (table.name,))
 
-	table.show_columns()
-
 	sql = "DESCRIBE %s" % (table.name,)
+	output_table_from_sql(conn, cursor, sql)
+
+	sql = "SELECT * FROM %s ORDER BY RAND() LIMIT 3" % (table.name,)
 	output_table_from_sql(conn, cursor, sql)
 
 	return True
