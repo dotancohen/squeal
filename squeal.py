@@ -146,7 +146,10 @@ def main():
 
 def output_title(text, leading_newlines=3):
 
-	print('\n'*leading_newlines)
+	if leading_newlines<1:
+		raise IndexError
+
+	print('\n'*(leading_newlines-1))
 	print('   %s' % (text,))
 	print('   ' + '-'*len(text))
 
