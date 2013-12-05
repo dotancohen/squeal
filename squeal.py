@@ -54,10 +54,8 @@ def main():
 
 		if show_menu:
 			output_title(menu_title)
-			i = 1
-			for t in menu_tables:
-				print("%s: %s (%s)" % (i, t.name, t.records,))
-				i +=1
+			for i,t in enumerate(menu_tables):
+				print("%s: %s (%s)" % (i+1, t.name, t.records,))
 
 			print("\nPlease select an operation:")
 			print("--------------------------")
