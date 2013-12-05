@@ -171,7 +171,17 @@ def populate_tables(conn, cursor):
 		cursor.execute(sql)
 		conn.commit()
 		records = cursor.fetchone()[0] # Fetch first column of first row
-		tables.append(Table(t, records))
+
+		new_table = Table(t, records)
+
+		sql = "DESCRIBE %s" % (t, )
+		cursor.execute(sql)
+		conn.commit()
+		for row in cursor.fetchall():
+			new_table.add_column(Column(row[0], row[1], row[2], row[3], row[4], row[5]))
+
+		tables.append(new_table)
+		new_table = None
 
 	"""
 	# This is inaccurate on InnoDB!
@@ -228,6 +238,8 @@ def sort_tables(tables, order='alph', limit=None):
 def show_table_details(conn, cursor, prompt, table):
 
 	output_title("Showing table %s" % (table.name,))
+
+	table.show_columns()
 
 	sql = "DESCRIBE %s" % (table.name,)
 	output_table_from_sql(conn, cursor, sql)
