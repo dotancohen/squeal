@@ -240,25 +240,49 @@ def show_table_details(conn, cursor, prompt, table):
 	output_title("Showing table %s" % (table.name,))
 	random_values_to_show = 10
 
+
+	# Describe table
+
+	output_title("Describe table", 1)
 	sql = "DESCRIBE %s" % (table.name,)
 	output_table_from_sql(conn, cursor, sql)
 
+
+	# Attempt to get primary key
+
 	try:
 		primary_key = [c.field for c in table.columns if c.key=='PRI'][0]
-		random_keys = ','.join([str(random.randint(0,table.records)) for i in range(random_values_to_show)])
-		sql = "SELECT * FROM %s WHERE %s IN (%s)" % (table.name, primary_key, random_keys,)
-		output_table_from_sql(conn, cursor, sql)
 	except TypeError:
-		# Perhaps there is no primary key!
+		primary_key = False
+
+
+	# Some random records
+
+	output_title("Some random records", 1)
+	if primary_key==False:
 		sql = "SELECT * FROM %s ORDER BY RAND() LIMIT %s" % (table.name, random_values_to_show,)
 		output_table_from_sql(conn, cursor, sql)
 
+	else:
+		random_keys = ','.join([str(random.randint(0,table.records)) for i in range(random_values_to_show)])
+		sql = "SELECT * FROM %s WHERE %s IN (%s)" % (table.name, primary_key, random_keys,)
+		output_table_from_sql(conn, cursor, sql)
+
+
+	# Complete last record
+
+	if primary_key==False:
+		output_title("No primary key, so cannot output last record!", 1)
+	else:
+		output_title("Last record", 1)
+		sql = "SELECT * FROM %s ORDER BY %s DESC LIMIT 1" % (table.name, primary_key,)
+		output_table_from_sql(conn, cursor, sql, vertical_format=True)
 
 	return True
 
 
 
-def output_table_from_sql(conn, cursor, sql, data=None):
+def output_table_from_sql(conn, cursor, sql, data=None, vertical_format=False):
 
 	# TODO: Make this a configuration item, not hard-coded
 	line_length = 115
@@ -269,30 +293,36 @@ def output_table_from_sql(conn, cursor, sql, data=None):
 	conn.commit()
 	results = cursor.fetchall()
 
-	widths = []
-	columns = []
-	tavnit = '|'
-	separator = '+'
+	if vertical_format:
 
-	for cd in cursor.description:
-		widths.append(max(cd[2], len(cd[0])))
-		columns.append(cd[0])
+		for i in range(len(cursor.description)):
+			print("%s:\n        %s\n" % (cursor.description[i][0], results[0][i],))
 
-	for w in widths:
-		tavnit += " %-"+"%ss |" % (w,)
-		separator += '-'*w + '--+'
+	else:
+		widths = []
+		columns = []
+		tavnit = '|'
+		separator = '+'
 
-	# Now print!
+		for cd in cursor.description:
+			widths.append(max(cd[2], len(cd[0])))
+			columns.append(cd[0])
 
-	print(separator[:line_length])
-	print((tavnit % tuple(columns))[:line_length])
+		for w in widths:
+			tavnit += " %-"+"%ss |" % (w,)
+			separator += '-'*w + '--+'
 
-	print(separator[:line_length])
-	for row in results:
-		print((tavnit % row)[:line_length])
+		# Now print!
 
-	print(separator[:line_length])
-	print("Time: %s" % (round(end-start, 4),))
+		print(separator[:line_length])
+		print((tavnit % tuple(columns))[:line_length])
+
+		print(separator[:line_length])
+		for row in results:
+			print((tavnit % row)[:line_length])
+
+		print(separator[:line_length])
+		print("Time: %s" % (round(end-start, 4),))
 
 
 	return True
