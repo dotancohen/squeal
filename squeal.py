@@ -255,7 +255,7 @@ def show_table_details(conn, cursor, prompt, table):
 
 	try:
 		primary_key = [c.field for c in table.columns if c.key=='PRI'][0]
-	except TypeError:
+	except (TypeError, IndexError) as e:
 		primary_key = False
 
 
