@@ -14,7 +14,7 @@ database = 'phpfox'
 
 
 
-squeal_version = '0.1'
+squeal_version = '0.2 Beta'
 prompt = '>> '
 
 
@@ -238,14 +238,21 @@ def sort_tables(tables, order='alph', limit=None):
 def show_table_details(conn, cursor, prompt, table):
 
 	output_title("Showing table %s" % (table.name,))
+	random_values_to_show = 10
 
 	sql = "DESCRIBE %s" % (table.name,)
 	output_table_from_sql(conn, cursor, sql)
 
-	primary_key = [c.field for c in table.columns if c.key=='PRI'][0]
-	random_keys = ','.join([str(random.randint(0,table.records)) for i in range(5)])
-	sql = "SELECT * FROM %s WHERE %s IN (%s)" % (table.name, primary_key, random_keys,)
-	output_table_from_sql(conn, cursor, sql)
+	try:
+		primary_key = [c.field for c in table.columns if c.key=='PRI'][0]
+		random_keys = ','.join([str(random.randint(0,table.records)) for i in range(random_values_to_show)])
+		sql = "SELECT * FROM %s WHERE %s IN (%s)" % (table.name, primary_key, random_keys,)
+		output_table_from_sql(conn, cursor, sql)
+	except TypeError:
+		# Perhaps there is no primary key!
+		sql = "SELECT * FROM %s ORDER BY RAND() LIMIT %s" % (table.name, random_values_to_show,)
+		output_table_from_sql(conn, cursor, sql)
+
 
 	return True
 
