@@ -17,6 +17,33 @@ squeal_version = '0.1'
 prompt = '>> '
 
 
+class Column(object):
+
+	def __init__(self, field, typ, null, key, default, extra):
+
+		# Using name typ instead of type due to Python keyword
+
+		self.field = field
+		self.typ = typ
+		self.null = null
+		self.key = key
+		self.default = default
+		self.extra = extra
+
+
+
+	def __str__(self):
+
+		output = "field: %s\n" % (self.field,)
+		output+= "typ: %s\n" % (self.typ,)
+		output+= "null: %s\n" % (self.null,)
+		output+= "key: %s\n" % (self.key,)
+		output+= "default: %s\n" % (self.default,)
+		output+= "extra: %s\n" % (self.extra,)
+
+		return output
+
+
 
 class Table(object):
 
@@ -26,6 +53,7 @@ class Table(object):
 		self.records = records
 
 		self.engine = None
+		self.columns = []
 
 		# Note that this is available only when an 'insert' field is identified.
 		self.insert_frequency = None # Per day
@@ -33,6 +61,22 @@ class Table(object):
 		self.update_frequency = None # Per day.
 		# Note that this is available only when a 'delete' field is identified.
 		self.delete_frequency = None # Per day.
+
+
+
+	def add_column(self, column):
+
+		self.columns.append(column)
+		return True
+
+
+
+	def show_columns(self):
+
+		for c in self.columns:
+			print(c)
+
+		return True
 
 
 
