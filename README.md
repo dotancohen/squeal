@@ -25,7 +25,7 @@ SQueaL is useful for developers new to an existing project to become acquainted 
 Why the silly name?
 -------------------
 
-The name 'SQueaL' is bookended by the letters SQL, symbollically it shows you what is 'inside' the SQL. Also, the verb 'to squeal' means 'to snitch' or 'to inform', implying that this application reveals information which is otherwise not so easily accessible and concise.
+The name 'SQueaL' is bookended by the letters SQL, symbolically it shows you what is 'inside' the SQL. Also, the verb 'to squeal' means 'to snitch' or 'to inform', implying that this application reveals information which is otherwise not so easily accessible and concise.
 
 
 
@@ -45,5 +45,22 @@ What specific information does SQueaL provide?
 * Column names and types
 * Average, maximum, and minimum size of column values, and standard deviation
 * Typical or representative values for each column
+* View random records
 * Sort on metrics
 
+
+
+What dependencies does SQueaL have?
+-----------------------------------
+
+Just the Python2 core library and the Python MySQL connector. Try one of the following:
+
+    sudo aptitude install python python-mysqldb
+    sudo aptitude install python python-mysql.connector
+
+
+
+Why no Python3 support?
+-----------------------
+
+There is no MySQL connector for Python3 yet.
