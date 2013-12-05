@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 
 import MySQLdb
+import random
 import sys
 import time
 
@@ -242,7 +243,9 @@ def show_table_details(conn, cursor, prompt, table):
 	sql = "DESCRIBE %s" % (table.name,)
 	output_table_from_sql(conn, cursor, sql)
 
-	sql = "SELECT * FROM %s ORDER BY RAND() LIMIT 3" % (table.name,)
+	primary_key = [c.field for c in table.columns if c.key=='PRI'][0]
+	random_keys = ','.join([str(random.randint(0,table.records)) for i in range(5)])
+	sql = "SELECT * FROM %s WHERE %s IN (%s)" % (table.name, primary_key, random_keys,)
 	output_table_from_sql(conn, cursor, sql)
 
 	return True
