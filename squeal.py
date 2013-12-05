@@ -254,6 +254,9 @@ def show_table_details(conn, cursor, prompt, table):
 
 def output_table_from_sql(conn, cursor, sql, data=None):
 
+	# TODO: Make this a configuration item, not hard-coded
+	line_length = 115
+
 	start = time.time()
 	cursor.execute(sql, data)
 	end = time.time()
@@ -275,14 +278,14 @@ def output_table_from_sql(conn, cursor, sql, data=None):
 
 	# Now print!
 
-	print(separator)
-	print(tavnit % tuple(columns))
+	print(separator[:line_length])
+	print((tavnit % tuple(columns))[:line_length])
 
-	print(separator)
+	print(separator[:line_length])
 	for row in results:
-		print(tavnit % row)
+		print((tavnit % row)[:line_length])
 
-	print(separator)
+	print(separator[:line_length])
 	print("Time: %s" % (round(end-start, 4),))
 
 
