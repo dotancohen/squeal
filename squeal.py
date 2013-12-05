@@ -100,10 +100,9 @@ def main():
 		if show_menu:
 			output_title(menu_title)
 			for i,t in enumerate(menu_tables):
-				print("%s: %s (%s)" % (i+1, t.name, t.records,))
+				print(" %s: %s  (%s)" % (i+1, t.name, t.records,))
 
-			print("\nPlease select an operation:")
-			print("--------------------------")
+			output_title("Please select an operation:", 1)
 			print(" #. Enter a table number to see details.")
 			print(" A. Show all tables sorted by size decending")
 			print(" B. Show all tables sorted by size ascending")
@@ -145,9 +144,9 @@ def main():
 
 
 
-def output_title(text):
+def output_title(text, leading_newlines=3):
 
-	print('')
+	print('\n'*leading_newlines)
 	print('   %s' % (text,))
 	print('   ' + '-'*len(text))
 
