@@ -251,7 +251,9 @@ def show_table_details(conn, cursor, prompt, table):
 
 def output_table_from_sql(conn, cursor, sql, data=None):
 
+	start = time.time()
 	cursor.execute(sql, data)
+	end = time.time()
 	conn.commit()
 	results = cursor.fetchall()
 
@@ -278,6 +280,7 @@ def output_table_from_sql(conn, cursor, sql, data=None):
 		print(tavnit % row)
 
 	print(separator)
+	print("Time: %s" % (round(end-start, 4),))
 
 
 	return True
