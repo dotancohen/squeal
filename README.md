@@ -55,8 +55,14 @@ What dependencies does SQueaL have?
 
 Just the Python2 core library and the Python MySQL connector. Try one of the following:
 
-    sudo aptitude install python python-mysqldb
-    sudo aptitude install python python-mysql.connector
+### Ubuntu
+
+    $ sudo aptitude install python python-mysqldb
+    $ sudo aptitude install python python-mysql.connector
+
+### RHEL / CentOS
+
+	# yum install mysql-connector-python
 
 
 
@@ -64,3 +70,18 @@ Why no Python3 support?
 -----------------------
 
 There is no MySQL connector for Python3 yet.
+
+
+
+Who to contact for feature requests, bugfixes, praise, or blame?
+----------------------------------------------------------------
+
+### Author and maintainer
+
+Dotan Cohen
+http://dotancohen.com
+You can find my email address and other contact information in your favorite search engine!
+
+### Project homepage
+
+http://github.com/dotancohen/squeal
