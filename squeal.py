@@ -297,6 +297,10 @@ def output_table_from_sql(conn, cursor, sql, data=None, vertical_format=False):
 	conn.commit()
 	results = cursor.fetchall()
 
+	if 0==len(results):
+		print("No records returned!")
+		return True
+
 	if vertical_format:
 
 		for i in range(len(cursor.description)):
