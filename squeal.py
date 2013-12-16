@@ -170,14 +170,14 @@ def populate_tables(conn, cursor):
 		table_names.append(row[0])
 
 	for t in table_names:
-		sql = "SELECT count(*) FROM %s" % (t, )
+		sql = "SELECT count(*) FROM `%s`" % (t, )
 		cursor.execute(sql)
 		conn.commit()
 		records = cursor.fetchone()[0] # Fetch first column of first row
 
 		new_table = Table(t, records)
 
-		sql = "DESCRIBE %s" % (t, )
+		sql = "DESCRIBE `%s`" % (t, )
 		cursor.execute(sql)
 		conn.commit()
 		for row in cursor.fetchall():
@@ -247,7 +247,7 @@ def show_table_details(conn, cursor, prompt, table):
 	# Describe table
 
 	output_title("Describe table", 1)
-	sql = "DESCRIBE %s" % (table.name,)
+	sql = "DESCRIBE `%s`" % (table.name,)
 	output_table_from_sql(conn, cursor, sql)
 
 
@@ -263,12 +263,13 @@ def show_table_details(conn, cursor, prompt, table):
 
 	output_title("Some random records", 1)
 	if primary_key==False:
-		sql = "SELECT * FROM %s ORDER BY RAND() LIMIT %s" % (table.name, random_values_to_show,)
+		sql = "SELECT * FROM `%s` ORDER BY RAND() LIMIT %s" % (table.name, random_values_to_show,)
 		output_table_from_sql(conn, cursor, sql)
 
 	else:
-		random_keys = ','.join([str(random.randint(0,table.records)) for i in range(random_values_to_show)])
-		sql = "SELECT * FROM %s WHERE %s IN (%s)" % (table.name, primary_key, random_keys,)
+		random_keys = "','".join([str(random.randint(0,table.records)) for i in range(random_values_to_show)])
+		random_keys = "'" + random_keys + "'"
+		sql = "SELECT * FROM `%s` WHERE `%s` IN (%s)" % (table.name, primary_key, random_keys,)
 		output_table_from_sql(conn, cursor, sql)
 
 
@@ -278,7 +279,7 @@ def show_table_details(conn, cursor, prompt, table):
 		output_title("No primary key, so cannot output last record!", 1)
 	else:
 		output_title("Last record", 1)
-		sql = "SELECT * FROM %s ORDER BY %s DESC LIMIT 1" % (table.name, primary_key,)
+		sql = "SELECT * FROM `%s` ORDER BY `%s` DESC LIMIT 1" % (table.name, primary_key,)
 		output_table_from_sql(conn, cursor, sql, vertical_format=True)
 
 	return True
