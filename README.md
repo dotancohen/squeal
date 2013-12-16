@@ -62,7 +62,12 @@ Just the Python2 core library and the Python MySQL connector. Try one of the fol
 
 ### RHEL / CentOS
 
-	# yum install mysql-connector-python
+Fight with some of these, and please let me know what works for you.
+
+	# yum install python-devel mysql-connector-python MySQL-python
+	# yum install mysql-devel
+	$ export PYTHONPATH='.easy_install/lib/python2.6/site-packages'
+	$ easy_install --prefix=.easy_install MySQL-python
 
 
 
