@@ -103,16 +103,23 @@ def main():
 				print(" %s: %s  (%s)" % (i+1, t.name, t.records,))
 
 			output_title("Please select an operation:", 1)
-			print(" #. Enter a table number to see details.")
-			print(" A. Show all tables sorted by size decending")
-			print(" B. Show all tables sorted by size ascending")
-			print(" C. Show all tables sorted alphabetically")
-			print(" -. Exit")
+			print("   #. Enter a table number to see details.")
+			print("   A. Show all tables sorted by size decending")
+			print("   B. Show all tables sorted by size ascending")
+			print("   C. Show all tables sorted alphabetically")
+			print("   -. Exit")
 
 		else:
 			show_menu = True
 
-		operation = raw_input(prompt)
+		user_input = raw_input(prompt).split(' ')
+		operation = user_input[0]
+		if 1<len(user_input):
+			quantity = user_input[1]
+			if not quantity.isdigit():
+				print("\nQuantity must be a number!")
+				show_menu = False
+				continue
 
 		if operation.isdigit():
 			operation = int(operation)
@@ -127,15 +134,19 @@ def main():
 
 			if operation == '-':
 				sys.exit()
+
 			elif operation == 'a':
 				menu_title = "All tables sorted by size decending"
 				menu_tables = sort_tables(all_tables, 'desc')
+
 			elif operation == 'b':
 				menu_title = "All tables sorted by size ascending"
 				menu_tables = sort_tables(all_tables, 'asc')
+
 			elif operation == 'c':
 				menu_title = "All tables sorted alphabetically"
 				menu_tables = sort_tables(all_tables, 'alph')
+
 			else:
 				print("\nInvalid input!")
 				show_menu = False
