@@ -92,14 +92,16 @@ def main():
 	all_tables = populate_tables(conn, cursor)
 
 	menu_title = "20 largest tables"
-	menu_tables = sort_tables(all_tables, 'desc', 20)
+	menu_tables = sort_tables(all_tables, 'desc')
 	show_menu = True
+	tables_to_show = 20
+	records_to_show = 10
 
 	while True:
 
 		if show_menu:
 			output_title(menu_title)
-			for i,t in enumerate(menu_tables):
+			for i,t in enumerate(menu_tables[:tables_to_show]):
 				print(" %s: %s  (%s)" % (i+1, t.name, t.records,))
 
 			output_title("Please select an operation:", 1)
@@ -107,6 +109,9 @@ def main():
 			print("   A. Show all tables sorted by size decending")
 			print("   B. Show all tables sorted by size ascending")
 			print("   C. Show all tables sorted alphabetically")
+			#print("   N. Show next tables")
+			print(" S #. Set number of tables to show in summary")
+			print(" R #. Set number of records to show in tables")
 			print("   -. Exit")
 
 		else:
@@ -114,19 +119,27 @@ def main():
 
 		user_input = raw_input(prompt).split(' ')
 		operation = user_input[0]
+
 		if 1<len(user_input):
-			quantity = user_input[1]
-			if not quantity.isdigit():
+			if not user_input[1].isdigit():
 				print("\nQuantity must be a number!")
 				show_menu = False
 				continue
+			quantity = int(user_input[1])
+		else:
+			quantity = None
+
+
+		# We have input, now do something with it!
 
 		if operation.isdigit():
 			operation = int(operation)
+
 			if 0<operation and operation<=len(menu_tables):
-				show_table_details(conn, cursor, prompt, menu_tables[operation-1])
+				show_table_details(conn, cursor, prompt, menu_tables[operation-1], records_to_show)
+
 			else:
-				print("\nInvalid input!")
+				print("\nInput out of range!")
 				show_menu = False
 
 		else:
@@ -146,6 +159,24 @@ def main():
 			elif operation == 'c':
 				menu_title = "All tables sorted alphabetically"
 				menu_tables = sort_tables(all_tables, 'alph')
+
+			elif operation == 's':
+				show_menu = False
+				if quantity==None:
+					print("\nNeed quantity!")
+					continue
+
+				tables_to_show = quantity
+				print("\nTables to show set as %i" % (tables_to_show,) )
+
+			elif operation == 'r':
+				show_menu = False
+				if quantity==None:
+					print("\nNeed quantity!")
+					continue
+
+				records_to_show = quantity
+				print("\nRecords to show set as %i" % (records_to_show,) )
 
 			else:
 				print("\nInvalid input!")
@@ -214,12 +245,9 @@ def populate_tables(conn, cursor):
 
 
 
-def sort_tables(tables, order='alph', limit=None):
+def sort_tables(tables, order='alph'):
 
 	legal_orders = ['alph', 'asc', 'desc']
-
-	if limit == None:
-		limit = len(tables)
 
 	if not order in legal_orders:
 		return False
@@ -230,10 +258,10 @@ def sort_tables(tables, order='alph', limit=None):
 	sorted_size = sorted(tables, key=lambda k: k.records)
 
 	if order=='asc':
-		return sorted_size[:limit]
+		return sorted_size
 
 	if order=='desc':
-		return sorted_size[::-1][:limit]
+		return sorted_size[::-1]
 
 	"""
 	print("\nShow 3 largest tables")
@@ -249,11 +277,9 @@ def sort_tables(tables, order='alph', limit=None):
 
 
 
-def show_table_details(conn, cursor, prompt, table):
+def show_table_details(conn, cursor, prompt, table, random_values_to_show=10):
 
 	output_title("Showing table %s" % (table.name,))
-	random_values_to_show = 10
-
 
 	# Describe table
 
