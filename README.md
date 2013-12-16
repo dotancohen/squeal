@@ -73,15 +73,15 @@ There is no MySQL connector for Python3 yet.
 
 
 
-Who to contact for feature requests, bugfixes, praise, or blame?
+Who to contact for feature requests, bugs, patches, praise, or blame?
 ----------------------------------------------------------------
 
-### Author and maintainer
-
-Dotan Cohen
-http://dotancohen.com
-You can find my email address and other contact information in your favorite search engine!
-
-### Project homepage
+### Squeal project homepage (feature requests, bugs, and patches)
 
 http://github.com/dotancohen/squeal
+
+### Squeal author and maintainer (praise and blame)
+
+Dotan Cohen  
+http://dotancohen.com  
+You can find my email address and other contact information in your favorite search engine!
