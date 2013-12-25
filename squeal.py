@@ -250,16 +250,6 @@ def sort_tables(tables, order='alph'):
 	if order=='desc':
 		return sorted_size[::-1]
 
-	"""
-	print("\nShow 3 largest tables")
-	for i in range(20):
-		print("%s: %s" % (tables_sorted_size[-1-i].name, tables_sorted_size[-1-i].records,))
-
-	print("\nShow 3 smallest tables")
-	for i in range(3):
-		print("%s: %s" % (tables_sorted_size[i].name, tables_sorted_size[i].records,))
-	"""
-
 	return True
 
 
@@ -363,18 +353,3 @@ def output_table_from_sql(conn, cursor, sql, data=None, vertical_format=False):
 
 if __name__ == '__main__':
 	main()
-
-
-
-"""
-	for row in results:
-		print(row[0])
-
-
-	for t in table_names:
-		sql = "SELECT count(*) FROM %s" % (t, )
-		cursor.execute(sql)
-		conn.commit()
-		records = cursor.fetchone()[0] # Fetch first column of first row
-		tables.append(Table(t, records))
-"""
