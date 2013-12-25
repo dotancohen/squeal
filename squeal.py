@@ -228,19 +228,6 @@ def populate_tables(conn, cursor):
 		tables.append(new_table)
 		new_table = None
 
-	"""
-	# This is inaccurate on InnoDB!
-
-	tables = []
-
-	sql = "SELECT table_name,table_rows FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = %(db)s"
-	cursor.execute(sql, {'db': database})
-	conn.commit()
-
-	for row in cursor.fetchall():
-		tables.append(Table(row[0], row[1],))
-	"""
-
 	return tables
 
 
