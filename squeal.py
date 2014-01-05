@@ -281,9 +281,9 @@ def show_table_details(conn, cursor, prompt, table, random_values_to_show=10):
 		output_table_from_sql(conn, cursor, sql)
 
 	else:
-		random_keys = "','".join([str(random.randint(0,table.records)) for i in range(random_values_to_show)])
+		random_keys = "','".join([str(random.randint(0,table.records)) for i in range(random_values_to_show*5)])
 		random_keys = "'" + random_keys + "'"
-		sql = "SELECT * FROM `%s` WHERE `%s` IN (%s)" % (table.name, primary_key, random_keys,)
+		sql = "SELECT * FROM `%s` WHERE `%s` IN (%s) LIMIT %s" % (table.name, primary_key, random_keys, random_values_to_show)
 		output_table_from_sql(conn, cursor, sql)
 
 
