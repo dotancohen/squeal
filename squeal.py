@@ -292,7 +292,7 @@ def show_table_details(conn, cursor, prompt, table, random_values_to_show=10):
 	if primary_key==False:
 		output_title("No primary key, so cannot output last record!", 1)
 	else:
-		output_title("Last record", 1)
+		output_title("Complete last record", 1)
 		sql = "SELECT * FROM `%s` ORDER BY `%s` DESC LIMIT 1" % (table.name, primary_key,)
 		output_table_from_sql(conn, cursor, sql, vertical_format=True)
 
@@ -317,8 +317,12 @@ def output_table_from_sql(conn, cursor, sql, data=None, vertical_format=False):
 
 	if vertical_format:
 
+		longest_description = 0
 		for i in range(len(cursor.description)):
-			print("%s:\n        %s\n" % (cursor.description[i][0], results[0][i],))
+			longest_description = max(longest_description, len(cursor.description[i][0]))
+
+		for i in range(len(cursor.description)):
+			print("%s: %s" % (cursor.description[i][0].rjust(longest_description, ' '), results[0][i],))
 
 	else:
 		widths = []
