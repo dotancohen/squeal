@@ -14,9 +14,10 @@ database = 'phpfox'
 
 
 
-squeal_version = '0.2 Beta'
+squeal_version = '0.3 Beta'
 prompt = '>> '
 query_prompt = 'query> '
+exit_commands = ['-', 'exit', 'exit;', 'quit', 'quit;', ':q', ':wq', 'bye']
 
 
 class Column(object):
@@ -84,7 +85,7 @@ class Table(object):
 
 def main():
 
-	global prompt, query_prompt, squeal_version, host, username, password, database
+	global prompt, query_prompt, exit_commands, squeal_version, host, username, password, database
 
 	print("\nWelcome to Squeal version %s!" % (squeal_version, ))
 
@@ -147,7 +148,7 @@ def main():
 		else:
 			operation = operation.lower().strip()
 
-			if operation == '-':
+			if any( [operation==x for x in exit_commands] ):
 				sys.exit()
 
 			elif operation == 'a':
@@ -370,8 +371,6 @@ def run_arbitrary_queries(query_prompt, conn, cursor):
 
 		if user_input.endswith(';'):
 			user_input = user_input[0:-1]
-
-		print(user_input)
 
 		if any( [user_input==x for x in ['exit', 'exit()', 'quit', 'quit()']] ):
 			return True
