@@ -16,6 +16,7 @@ database = 'phpfox'
 
 squeal_version = '0.2 Beta'
 prompt = '>> '
+query_prompt = 'query> '
 
 
 class Column(object):
@@ -83,7 +84,7 @@ class Table(object):
 
 def main():
 
-	global prompt, squeal_version, host, username, password, database
+	global prompt, query_prompt, squeal_version, host, username, password, database
 
 	print("\nWelcome to Squeal version %s!" % (squeal_version, ))
 
@@ -110,8 +111,9 @@ def main():
 			print("   B. Show all tables sorted by size ascending")
 			print("   C. Show all tables sorted alphabetically")
 			#print("   N. Show next tables")
-			print(" S #. Set number of tables to show in summary")
+			print("   Q. Run arbitrary queries")
 			print(" R #. Set number of records to show in tables")
+			print(" S #. Set number of tables to show in summary")
 			print("   -. Exit")
 
 		else:
@@ -160,14 +162,8 @@ def main():
 				menu_title = "All tables sorted alphabetically"
 				menu_tables = sort_tables(all_tables, 'alph')
 
-			elif operation == 's':
-				show_menu = False
-				if quantity==None:
-					print("\nNeed quantity!")
-					continue
-
-				tables_to_show = quantity
-				print("\nTables to show set as %i" % (tables_to_show,) )
+			elif operation == 'q':
+				run_arbitrary_queries(query_prompt, conn, cursor)
 
 			elif operation == 'r':
 				show_menu = False
@@ -177,6 +173,18 @@ def main():
 
 				records_to_show = quantity
 				print("\nRecords to show set as %i" % (records_to_show,) )
+
+			elif operation == 's':
+				show_menu = False
+				if quantity==None:
+					print("\nNeed quantity!")
+					continue
+
+				tables_to_show = quantity
+				print("\nTables to show set as %i" % (tables_to_show,) )
+
+			elif operation == '':
+				show_menu = False
 
 			else:
 				print("\nInvalid input!")
@@ -350,6 +358,27 @@ def output_table_from_sql(conn, cursor, sql, data=None, vertical_format=False):
 		print(separator[:line_length])
 		print("Time: %s" % (round(end-start, 4),))
 
+
+	return True
+
+
+
+def run_arbitrary_queries(query_prompt, conn, cursor):
+
+	while True:
+		user_input = raw_input(query_prompt).strip()
+
+		if user_input.endswith(';'):
+			user_input = user_input[0:-1]
+
+		print(user_input)
+
+		if any( [user_input==x for x in ['exit', 'exit()', 'quit', 'quit()']] ):
+			return True
+		elif user_input=='':
+			continue
+
+		output_table_from_sql(conn, cursor, user_input)
 
 	return True
 
