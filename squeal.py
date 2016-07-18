@@ -89,7 +89,7 @@ def main():
 
 	print("\nWelcome to Squeal version %s!" % (squeal_version, ))
 
-	conn = MySQLdb.connect(host=host, user=username, passwd=password, db=database)
+	conn = MySQLdb.connect(host=host, user=username, passwd=password, db=database, charset='utf8')
 	cursor = conn.cursor()
 	all_tables = populate_tables(conn, cursor)
 
