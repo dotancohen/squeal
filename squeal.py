@@ -1,11 +1,18 @@
 #!/usr/bin/python2
 
-import MySQLdb
 import random
 import sys
 import time
 
 from pprint import pprint
+
+try:
+	import MySQLdb
+except (ImportError) as e:
+	print("Please install a MySQL driver for Python 2. See the README file for details.")
+	sys.exit()
+
+
 
 host = 'localhost'
 username = 'root'
